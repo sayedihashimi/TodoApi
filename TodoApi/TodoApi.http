@@ -1,0 +1,425 @@
+﻿@TodoApi_HostAddress = https://localhost:5001
+
+# To get started follow these steps
+# 1. Clone repo at https://github.com/davidfowl/TodoApi
+# 2. cd to TodoApi project directory and run the following commands.
+#      mkdir .db
+#      dotnet ef database update
+# 3. Create a user with the 'Create user' post below
+# 4. In the TodoApi project dir run the following
+#      dotnet user-jwts create
+#      dotnet user-jwts create -n myuser
+# 5. Copy the bearer token value and paste it for the value of @authToken below
+
+@username = myuser
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im15dXNlciIsInN1YiI6Im15dXNlciIsImp0aSI6ImVkNjM1M2UiLCJhdWQiOlsiaHR0cDovL2xvY2FsaG9zdDo0Nzc0MyIsImh0dHBzOi8vbG9jYWxob3N0OjQ0MzcxIiwiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCJdLCJuYmYiOjE2OTQ1NDI3MDgsImV4cCI6MTcwMjQwNTEwOCwiaWF0IjoxNjk0NTQyNzA5LCJpc3MiOiJkb3RuZXQtdXNlci1qd3RzIn0.29bqEqbLXV4BXZcDkgwcmPLkLwQZRc2czpRFNf54OPg
+
+# Create user
+POST {{TodoApi_HostAddress}}/users
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "MyP@ssw0rd"
+}
+
+###
+
+# list the current TODO items
+GET {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{authToken}}
+
+###
+
+# create a few new TODO item
+POST {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Todo item 1"
+}
+### 
+POST {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Todo item 2"
+}
+### 
+POST {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Todo item 3"
+}
+### 
+POST {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Todo item 4"
+}
+### 
+POST {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Todo item 6"
+}
+### 
+GET {{TodoApi_HostAddress}}/todos/1
+Authorization: Bearer {{authToken}}
+
+###
+
+# modify an existing TODO
+PUT {{TodoApi_HostAddress}}/todos/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "Todo item 1 - modified",
+  "isComplete": true
+}
+
+###
+
+# delete a TODO item
+
+DELETE {{TodoApi_HostAddress}}/todos/1
+Authorization: Bearer {{authToken}}
+### 
+
+//------------------------------------------------------------------
+// Other queries below go to httpbin.org showing different things
+//------------------------------------------------------------------
+@searchTerm = some-search-term
+@host = https://httpbin.org
+
+GET https://httpbin.org/get
+###
+
+// sample with query params
+GET https://httpbin.org/get?name=Sayed?&phone=111-222-3333
+###
+
+// additional headers
+// Issue: this doesn't work in VS bug filed #1885330
+GET https://httpbin.org/get?name=Sayed?&phone=111-222-3333
+Date: Wed, 27 Apr 2023 07:28:00 GMT
+Cache-Control: max-age=604800
+Age: 100
+
+###
+
+// request has http version in the request line
+POST https://httpbin.org/post HTTP/1.1
+Content-Type: application/json
+Accept-Language: en-US,en;q=0.5
+
+{
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT",
+    "someUrl":"https://example.com/sample"
+}
+###
+
+// query string and http version in requst line and extra headers
+POST https://httpbin.org/post HTTP/1.1
+Content-Type: application/json
+Accept-Language: en-US,en;q=0.5
+Age: 100
+Cache-Control: max-age=604800
+
+{
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT",
+    "someUrl":"https://example.com/sample"
+}
+###
+POST https://httpbin.org/anything HTTP/1.1
+content-type: application/json
+
+{
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+
+###
+# request with a request body as HTML
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+<request>
+    <name>sample</name>
+    <time>Wed, 21 Oct 2015 18:27:50 GMT</time>
+</request>
+
+###
+# reqeust with a basic JSON body
+POST https://httpbin.org/anything
+Content-Type: application/json
+
+{
+  "identity": "some-value-here-json"
+}
+
+###
+PUT https://httpbin.org/anything
+Accept: application/json
+Content-Type: application/json
+
+{
+  "author": "author-here",
+  "name": "name here",
+  "tags": {
+    "additionalProp1": "ap1",
+    "additionalProp2": "ap2",
+    "additionalProp3": "ap3"
+  },
+  "classifications": [
+    "console","web"
+  ],
+  "shortName": [
+    "shortNameValue"
+  ],
+}
+###
+# request with a form URL encoded body
+POST {{host}}/anything
+Content-Type: application/x-www-form-urlencoded
+
+identity=some-value-here
+
+###
+# request with a form URL encoded body across multiple lines
+POST {{host}}/anything
+Content-Type: application/x-www-form-urlencoded
+
+name=foo
+&someOtherValue=bar
+
+###
+DELETE https://httpbin.org/anything
+
+###
+# request using dynamic variables
+POST https://httpbin.org/anything
+Content-Type: application/json
+
+{
+    "request_id": "{{$guid}}",
+    "updated_at": "{{$timestamp}}",
+    "created_at": "{{$timestamp -1 d}}",
+    "review_count": "{{$randomInt 5 200}}",
+    "custom_date": "{{$datetime 'yyyy-MM-dd'}}",
+    "local_custom_date": "{{$localDatetime 'yyyy-MM-dd'}}"
+}
+
+###
+
+//------------------------------------------------------------------
+// These request do NOT work in VS today, features are missing which
+// we will need to add later.
+//------------------------------------------------------------------
+# request with a query string on multiple lines
+GET https://httpbin.org/anything
+    ?page=2
+    &pageSize=10
+
+###
+# request with a query string on multiple lines and headers
+GET https://httpbin.org/anything
+    ?page=2
+    &pageSize=10
+User-Agent: rest-client
+Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
+Content-Type: application/json
+
+###
+# request with a request body that comes from a file, fullpath
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+< C:\data\mycode\sayed-samples\http-files\demo.xml
+###
+# request with a request body that comes from a file, fullpath
+#    note: \\ works as well as \
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+< C:\\data\\mycode\\sayed-samples\\http-files\\demo.xml
+###
+# request with a request body that comes from a file, fullpath
+#    note: / works as well as \ and \\
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+< C:/data/mycode/sayed-samples/http-files/demo.xml
+###
+# request with a request body that comes from a file, relative path
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+< ./demo.xml
+###
+# request with 
+#    - a request body that comes from a file, relative path
+#    - file has HTTP variables that need to be replaced
+#       - indicated by <@ below.
+# When the request is sent, notice that {{searchTerm}} is replaced
+#    with the value that is defined at the top of this file.
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+<@ ./demo.xml
+###
+# request with 
+#    - a request body that comes from a file, relative path
+#    - file has HTTP variables that need to be replaced
+#       - indicated by <@ below.
+#    - specifies file encoding (latin1 below)
+# When the request is sent, notice that {{searchTerm}} is replaced
+#    with the value that is defined at the top of this file.
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+<@latin1 ./demo.xml
+###
+
+# request with content is a multipart/form-data.
+# when this request is sent, the image is uploaded as well.
+POST {{host}}/anything
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="text"
+
+title
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="img1.png"
+Content-Type: image/png
+
+< ./img1.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+// example of a "Named Request".
+// Note: This request works but we don't populate the named request.
+# @name login
+POST {{host}}/api/login HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+name=foo&password=bar
+
+###
+######
+# GraphQL samples
+######
+POST https://api.github.com/graphql
+Content-Type: application/json
+Authorization: Bearer xxx
+X-REQUEST-TYPE: GraphQL
+
+query ($name: String!, $owner: String!) {
+  repository(name: $name, owner: $owner) {
+    name
+    fullName: nameWithOwner
+    description
+    diskUsage
+    forkCount
+    stargazers(first: 5) {
+        totalCount
+        nodes {
+            login
+            name
+        }
+    }
+    watchers {
+        totalCount
+    }
+  }
+}
+
+{
+    "name": "vscode-restclient",
+    "owner": "Huachao"
+}
+
+###
+
+######
+# Curl samples
+######
+
+# curl request on one line
+curl -X 'POST' 'https://httpbin.org/anything' -H 'accept: application/json' -H 'Content-Type: application/json' -d '"id1-goes-here"'
+
+###
+
+# curl request over multiple lines
+curl -X 'POST' 'https://httpbin.org/anything' 
+-H 'accept: application/json' 
+-H 'Content-Type: application/json' 
+-d '"id2-goes-here"'
+###
+# curl request over multiple lines
+#  notice how there is two -h on a single line
+curl -X 'POST' 'https://httpbin.org/anything' 
+-H 'accept: application/json' -H 'Content-Type: application/json' 
+-d '"id3-goes-here"'
+###
+curl -X POST -F "field=value1" "https://httpbin.org/anything"
+{
+  "author": "author-here",
+  "name": "name here",
+  "tags":{
+    "additionalProp1": "ap1",
+    "additionalProp2": "ap2",
+    "additionalProp3": "ap3"
+  },
+  "classifications": [
+    "console","web"
+  ],
+  "shortName": [
+    "shortNameValue"
+  ]
+}
+
+###
+
+# curl command taking text from a file as the
+#    @filename is the syntax
+curl -X POST -d @postme.json "http://httpbin.org/post"
+
+###
+
+# curl command taking text from a file as the
+#    @filename is a relative path here
+curl -X POST -d @./postme.json "http://httpbin.org/post"
+
+###
+
+# curl command taking text from a file as the
+#    @filename is a full path here
+curl -X POST -d @C:\\data\\mycode\\sayed-samples\\http-files\\postme.json "http://httpbin.org/post"
+###
+
+# curl command taking text from a file as the
+#    @filename is a full path here, using \ instead of \\
+curl -X POST -d @C:/data/mycode/sayed-samples/http-files/postme.json "http://httpbin.org/post"
+###
