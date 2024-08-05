@@ -1,0 +1,18 @@
+@TodoApi_HostAddress = https://localhost:5001
+@token  =  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzYXllZGRlbW8xIiwianRpIjoiNGMzNWM4NTQiLCJhdWQiOlsiaHR0cDovL2xvY2FsaG9zdDo0Nzc0MyIsImh0dHBzOi8vbG9jYWxob3N0OjQ0MzcxIiwiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCJdLCJuYmYiOjE3MjI4NzI0NDQsImV4cCI6MTcyMjg3NDI0NCwiaWF0IjoxNzIyODcyNDQ0LCJpc3MiOiJkb3RuZXQtdXNlci1qd3RzIn0.jvOO41lLbZmsC20YKPWAqlfdKMXc2jw05r9lcYiqv-g
+
+# @name login
+GET {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{token}}
+
+###
+@authtoken = {{token}}
+
+POST {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Build TODO api"
+}
+### 

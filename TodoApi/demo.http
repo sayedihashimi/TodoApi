@@ -1,10 +1,8 @@
 @TodoApi_HostAddress = https://localhost:5001
 
-@username = sayeddemo1
+@username = sayeddemo2
 # password here for demo purposes only, store these in a secret store instead of here
 @password = MyP@ssw0rd
-
-
 
 # 1: Create a user
 
@@ -36,8 +34,68 @@ Content-Type: application/json
 ###
 # 4: Get todos and verify there is none
 GET {{TodoApi_HostAddress}}/todos
-Authorization: Bearer {{authtoken}}
+Authorization: Bearer {{login.response.body.$.token}}
 
 ###
 
+# 5: Create a couple TODO items
+# @name todo1
+POST {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "title": "Build TODO api"
+}
+### 
+
+# @name todo2
+POST {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "title": "Try API with an HTTP file"
+}
+
+###
+
+# 6: Get todos and verify there are two
+GET {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{login.response.body.$.token}}
+
+###
+
+# 7: Get the first TODO we created by id
+GET {{TodoApi_HostAddress}}/todos/{{todo1.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+###
+
+# 8: Modify the first TODO title
+PUT {{TodoApi_HostAddress}}/todos/{{todo1.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+    "id": {{todo1.response.body.$.id}},
+    "title":"{{todo1.response.body.$.title}} - verified at {{$datetime rfc1123}}"
+}
+###
+# 9: Verify the title was updated
+GET {{TodoApi_HostAddress}}/todos/{{todo1.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+###
+
+# 10: Mark first TODO as complete
+PUT {{TodoApi_HostAddress}}/todos/{{todo1.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+    "id": {{todo1.response.body.$.id}},
+    "title": "{{todo1.response.body.$.title}}",
+    "isComplete": true
+}
+
+###
 
