@@ -12,9 +12,10 @@
 # 5. Copy the bearer token value and paste it for the value of @authToken below
 
 @username = myuser
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im15dXNlciIsInN1YiI6Im15dXNlciIsImp0aSI6ImVkNjM1M2UiLCJhdWQiOlsiaHR0cDovL2xvY2FsaG9zdDo0Nzc0MyIsImh0dHBzOi8vbG9jYWxob3N0OjQ0MzcxIiwiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCJdLCJuYmYiOjE2OTQ1NDI3MDgsImV4cCI6MTcwMjQwNTEwOCwiaWF0IjoxNjk0NTQyNzA5LCJpc3MiOiJkb3RuZXQtdXNlci1qd3RzIn0.29bqEqbLXV4BXZcDkgwcmPLkLwQZRc2czpRFNf54OPg
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im15dXNlciIsInN1YiI6Im15dXNlciIsImp0aSI6Ijk0NjZiMjQ5IiwiYXVkIjpbImh0dHA6Ly9sb2NhbGhvc3Q6NDc3NDMiLCJodHRwczovL2xvY2FsaG9zdDo0NDM3MSIsImh0dHBzOi8vbG9jYWxob3N0OjUwMDEiLCJodHRwOi8vbG9jYWxob3N0OjUwMDAiXSwibmJmIjoxNzIyMDExMTI4LCJleHAiOjE3Mjk5NTk5MjgsImlhdCI6MTcyMjAxMTEyOSwiaXNzIjoiZG90bmV0LXVzZXItand0cyJ9.z495YmCRZ5nQGbFKqvJBam-HuGNRii7KhHCMrLAiTDw
 
 # Create user
+# @createuser login
 POST {{TodoApi_HostAddress}}/users
 Content-Type: application/json
 
@@ -24,11 +25,20 @@ Content-Type: application/json
 }
 
 ###
+@mypassword = somePassword.1
+@myusername = sayedha
+# @name login
+POST {{TodoApi_HostAddress}}/users/token
+Content-Type: application/json
 
-# list the current TODO items
+{
+  "username": "{{myusername}}",
+  "password": "{{mypassword}}"
+}
+
+###
 GET {{TodoApi_HostAddress}}/todos
-Authorization: Bearer {{authToken}}
-
+Authorization: Bearer {{login.response.body.$.token}}
 ###
 
 # create a few new TODO item
@@ -423,3 +433,36 @@ curl -X POST -d @C:\\data\\mycode\\sayed-samples\\http-files\\postme.json "http:
 #    @filename is a full path here, using \ instead of \\
 curl -X POST -d @C:/data/mycode/sayed-samples/http-files/postme.json "http://httpbin.org/post"
 ###
+
+
+
+POST https://httpbin.org/post
+Accept: application/json
+# comment
+// comment 1
+// comment 2
+User-Agent: jon
+
+// comment before body
+{
+  "x":123
+  // comment inside body
+}
+###
+POST https://httpbin.org/post
+Accept: application/json
+# comment
+// comment 1
+// comment 2
+User-Agent: jon
+// comment before body
+{
+  "x":123
+// comment inside body
+}
+
+
+# 1: gestuer to create a test
+# 2: convert HTTP request to test and use the request as a string
+# 3: add assertions into the HTTP file and then show them in the test window
+# TODO: Talk to sebastian ross regarding the stress testing ideas. He has a lot of exp in this space.
