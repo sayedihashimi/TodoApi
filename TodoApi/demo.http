@@ -1,18 +1,18 @@
 @TodoApi_HostAddress = https://localhost:5001
 
-@username = sayeddemo2
+@username = mvpdemo
 # password here for demo purposes only, store these in a secret store instead of here
 @password = MyP@ssw0rd
 
 # 1: Create a user
 
-# @createuser login
+# @name create
 POST {{TodoApi_HostAddress}}/users
 Content-Type: application/json
 
 {
   "username": "{{username}}",
-  "password": "MyP@ssw0rd"
+  "password": "{{password}}"
 }
 
 ###
@@ -26,6 +26,12 @@ Content-Type: application/json
   "username": "{{username}}",
   "password": "{{password}}"
 }
+
+###
+
+GET https://httpbin.org/headers
+X-Custom: {{login.response.headers.Server}}
+
 
 ###
 
@@ -45,9 +51,10 @@ Authorization: Bearer {{login.response.body.$.token}}
 Content-Type: application/json
 
 {
-  "title": "Build TODO api"
+  "title": "Do MVP Demo"
 }
 ### 
+
 
 # @name todo2
 POST {{TodoApi_HostAddress}}/todos
@@ -99,3 +106,55 @@ Content-Type: application/json
 
 ###
 
+# 11: Delete the first todo we created
+DELETE {{TodoApi_HostAddress}}/todos/{{todo1.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+
+###
+
+# 12: Verify only 1 todo left
+GET {{TodoApi_HostAddress}}/todos
+Authorization: Bearer {{login.response.body.$.token}}
+
+###
+
+
+# @name initialRequest
+GET https://httpbin.org/headers
+X-CUSTOM: SomeHeaderHere
+###
+
+GET https://httpbin.org/headers
+X-PrevValue: {{initialRequest.response.}}
+
+###
+
+
+### Basic Auth Request to httpbin.org
+# @name httpbinlogin
+GET https://httpbin.org/basic-auth/myusername/mypassword
+Authorization: Basic bXl1c2VybmFtZTpteXBhc3N3b3Jk
+
+###
+
+GET https://httpbin.org/headers
+X-SERVER: {{httpbinlogin.response.headers.Server}}
+
+###
+
+GET https://httpbin.org/headers
+X-Username: {{httpbinlogin.response.body.$.user}}
+
+###
+
+
+
+
+# @name binHeader
+GET https://httpbin.org/headers
+
+###
+
+GET https://httpbin.org/headers
+
+###
