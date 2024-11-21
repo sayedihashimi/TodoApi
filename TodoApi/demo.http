@@ -1,4 +1,4 @@
-@TodoApi_HostAddress = https://localhost:5001
+@TodoApi_HostAddress = https://localhost:5001\hello
 
 @username = mvpdemo
 # password here for demo purposes only, store these in a secret store instead of here
@@ -147,9 +147,6 @@ X-Username: {{httpbinlogin.response.body.$.user}}
 
 ###
 
-
-
-
 # @name binHeader
 GET https://httpbin.org/headers
 
@@ -158,3 +155,4 @@ GET https://httpbin.org/headers
 GET https://httpbin.org/headers
 
 ###
+

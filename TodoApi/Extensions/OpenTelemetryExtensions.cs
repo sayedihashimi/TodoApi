@@ -28,21 +28,20 @@ public static class OpenTelemetryExtensions
         {
             builder.Logging.AddOpenTelemetry(logging =>
             {
+                // TODO: BUILD ERROR
                 logging.SetResourceBuilder(resourceBuilder)
                        .AddOtlpExporter();
             });
         }
 
         builder.Services.AddOpenTelemetry()
-            .WithMetrics(metrics =>
-            {
+            .WithMetrics(metrics => {
                 metrics.SetResourceBuilder(resourceBuilder)
                        .AddPrometheusExporter()
                        .AddAspNetCoreInstrumentation()
                        .AddRuntimeInstrumentation()
                        .AddHttpClientInstrumentation()
-                       .AddEventCountersInstrumentation(c =>
-                       {
+                       .AddEventCountersInstrumentation(c => {
                            // https://learn.microsoft.com/en-us/dotnet/core/diagnostics/available-counters
                            c.AddEventSources(
                                "Microsoft.AspNetCore.Hosting",
@@ -53,8 +52,7 @@ public static class OpenTelemetryExtensions
                                "System.Net.Security");
                        });
             })
-            .WithTracing(tracing =>
-            {
+            .WithTracing(tracing => {
                 // We need to use AlwaysSampler to record spans
                 // from Todo.Web.Server, because there it no OpenTelemetry
                 // instrumentation
@@ -64,12 +62,10 @@ public static class OpenTelemetryExtensions
                        .AddHttpClientInstrumentation()
                        .AddEntityFrameworkCoreInstrumentation();
 
-                if (!string.IsNullOrWhiteSpace(otlpEndpoint))
-                {
+                if (!string.IsNullOrWhiteSpace(otlpEndpoint)) {
                     tracing.AddOtlpExporter();
                 }
-            })
-            .StartWithHost();
+            }).StartWithHost();
 
         return builder;
     }
